@@ -81,6 +81,18 @@ std::vector<std::vector<char>> rotateTable(std::vector<std::vector<char>> origin
             }
             break;
         case DIAGONAL_UP:
+            for(int i = 0; i < (table.at(0).size() - 1); i++) { //front half
+                for(int j = 0; j < i + 1; j++) {
+                    v1.push_back(table.at(i - j).at(j));
+                }
+                rotated.push_back(v1);
+            }
+            for(int i = 0; i < table.at(0).size() - 1; i++) { //back half
+                for(int j = table.at(0).size() - 2; j >= i; j--) {
+                    v1.push_back(table.at(j).at((table.at(0).size() - 1) - (j - i)));
+                }
+                rotated.push_back(v1);
+            }
             break;
         default:
             rotated = rotateTable(original, HORIZONTAL);
@@ -99,8 +111,8 @@ int searchTable(std::vector<std::vector<char>> table, std::regex pattern) {
         str = buildString(v);
         while(std::regex_search(str, matches, pattern)) {
             numMatches++;
-            str = matches.suffix().str();
-            //str = str.substr(matches.position() + 1);
+            //str = matches.suffix().str();
+            str = str.substr(matches.position() + 1);
         }
     }
     return numMatches;

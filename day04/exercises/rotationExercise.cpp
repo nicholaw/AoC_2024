@@ -42,8 +42,11 @@ void printTable(vector<vector<char>> table, orientation o) {
                 }
                 cout << "\n";
             }
-            for(int i = (table.at(0).size() - 1); i > 0; i--) { //back half
-
+            for(int i = 0; i < table.at(0).size() - 1; i++) { //back half
+                for(int j = table.at(0).size() - 2; j >= i; j--) {
+                    cout << table.at(j).at((table.at(0).size() - 1) - (j - i));
+                }
+                cout << "\n";
             }
             break;
         default:
