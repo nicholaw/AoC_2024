@@ -45,10 +45,11 @@ std::string buildString(std::vector<char> v) {
  */
 std::vector<std::vector<char>> rotateTable(std::vector<std::vector<char>> original, orientation ort) {
     std::vector<std::vector<char>> rotated;
+    std::vector<char> v1 = {};
     switch(ort) {
         case HORIZONTAL:
             for(vector<char> v0 : original) {
-                std::vector<char> v1 = {};
+                v1.clear();
                 for(char c : v0) {
                     v1.push_back(c);
                 }
@@ -57,7 +58,7 @@ std::vector<std::vector<char>> rotateTable(std::vector<std::vector<char>> origin
             break;
         case VERTICAL:
             for(int i = original.at(0).size() - 1; i >=0; i--) {
-                std::vector<char> v1 = {};
+                v1.clear();
                 for(int j = 0; j < original.size(); j++) {
                     v1.push_back(original.at(j).at(i));
                 }
@@ -66,14 +67,14 @@ std::vector<std::vector<char>> rotateTable(std::vector<std::vector<char>> origin
             break;
         case DIAGONAL_DOWN:
             for(int i = 0; i < original.at(0).size() - 1; i++) {   //front half
-                std::vector<char> v1 = {};
+                v1.clear();
                 for(int j = 0; j < i + 1; j++) {
                     v1.push_back(original.at(j).at(j + original.at(0).size() - 1 - i));
                 }
                 rotated.push_back(v1);
             }
             for(int i = original.at(0).size() - 1; i > 0; i--) {   //back half
-                std::vector<char> v1 = {};
+                v1.clear();
                 for(int j = 0; j < i; j++) {
                     v1.push_back(original.at(original.at(0).size() - 1 - i + j).at(j));
                 }
@@ -81,15 +82,17 @@ std::vector<std::vector<char>> rotateTable(std::vector<std::vector<char>> origin
             }
             break;
         case DIAGONAL_UP:
-            for(int i = 0; i < (table.at(0).size() - 1); i++) { //front half
+            for(int i = 0; i < (original.at(0).size() - 1); i++) { //front half
+                v1.clear();
                 for(int j = 0; j < i + 1; j++) {
-                    v1.push_back(table.at(i - j).at(j));
+                    v1.push_back(original.at(i - j).at(j));
                 }
                 rotated.push_back(v1);
             }
-            for(int i = 0; i < table.at(0).size() - 1; i++) { //back half
-                for(int j = table.at(0).size() - 2; j >= i; j--) {
-                    v1.push_back(table.at(j).at((table.at(0).size() - 1) - (j - i)));
+            for(int i = 0; i < original.at(0).size() - 1; i++) { //back half
+                v1.clear();
+                for(int j = original.at(0).size() - 2; j >= i; j--) {
+                    v1.push_back(original.at(j).at((original.at(0).size() - 1) - (j - i)));
                 }
                 rotated.push_back(v1);
             }
@@ -111,8 +114,7 @@ int searchTable(std::vector<std::vector<char>> table, std::regex pattern) {
         str = buildString(v);
         while(std::regex_search(str, matches, pattern)) {
             numMatches++;
-            //str = matches.suffix().str();
-            str = str.substr(matches.position() + 1);
+            str = matches.suffix().str();
         }
     }
     return numMatches;
@@ -121,7 +123,12 @@ int searchTable(std::vector<std::vector<char>> table, std::regex pattern) {
 int main() {
     //Declare variables
     std::ifstream inputFile;
-    inputFile.open("input.txt");
+    std::ofstream outputFile;
+    //inputFile.open("input.txt");
+    inputFile.open("testInput.txt");
+    //outputFile.open("output.txt");
+    outputFile.open("testOutput.txt");
+
     std::regex forwardPattern("(XMAS)");
     std::regex backwardPattern("(SAMX)");
     std::vector<std::vector<char>> table;
@@ -137,6 +144,14 @@ int main() {
         table.push_back(v);
     }
 
+    //Check table read input correctly
+    for(std::vector<char> v : table) {
+        for(char c : v) {
+            outputFile << c;
+        }
+        outputFile << "\n";
+    }
+
     //Search table in each orientation
     occurances += searchTable(table, forwardPattern);
     occurances += searchTable(table, backwardPattern);
@@ -150,10 +165,8 @@ int main() {
     //Print results
     cout << occurances;
 
-    //Output rotated tables
-    writeTable("diagonal.txt", rotateTable(table, DIAGONAL_DOWN));
-
     //Close i/o files
     inputFile.close();
+    outputFile.close();
     return 0;
 }
