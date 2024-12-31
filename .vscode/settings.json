@@ -56,6 +56,7 @@
         "xtree": "cpp",
         "xutility": "cpp",
         "regex": "cpp",
-        "set": "cpp"
+        "set": "cpp",
+        "any": "cpp"
     }
 }
