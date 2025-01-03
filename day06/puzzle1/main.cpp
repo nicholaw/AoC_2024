@@ -1,9 +1,7 @@
-#include "utils.h"
-#include <set>
-
-//set<MapNode*> nodesVisited;
-//distinctLocations = nodesVisited.size();
+#include "lab.cpp"
 
 int main() {
+    Lab* lab = new Lab("input.txt");
+    lab->writeLabMap("output.txt");
     return 0;
 }
