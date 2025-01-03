@@ -2,6 +2,6 @@
 
 int main() {
     Lab* lab = new Lab("input.txt");
-    lab->writeLabMap("output.txt");
+    std::cout << lab->run();
     return 0;
 }

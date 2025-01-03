@@ -65,7 +65,7 @@ void Lab::moveGuard() {
             guardPosition->first++;
             break;
         case LEFT:
-            guardPosition->first--;
+            guardPosition->second--;
             break;
     }
 }//moveGuard
@@ -133,7 +133,11 @@ void Lab::writeLabMap(std::string destination) {
                         break;
                 }
             } else {
-                outputFile << ".";
+                if(labMap->at(i)->at(j)->wasVisited()) {
+                    outputFile << "X";
+                } else {
+                    outputFile << ".";
+                }
             }
         }
         if(i < (labMap->size() - 1)) {
@@ -144,7 +148,23 @@ void Lab::writeLabMap(std::string destination) {
 }//writeLabMap
 
 int Lab::run() {
-    return 0;
+    try {
+        int i = 0;
+        while(i < 2147483647) {
+            labMap->at(guardPosition->first)->at(guardPosition->second)->visit();
+            visitedNodes->insert(labMap->at(guardPosition->first)->at(guardPosition->second));
+            if (peekNextNode()) {
+                rotateGuard();
+            } else {
+                moveGuard();
+            }
+            i++;
+        }
+    } catch (std::exception e) {
+        writeLabMap("output.txt");
+        return visitedNodes->size();
+    }
+    return -1;
 }//run
 
 Lab::Lab(std::string input) {

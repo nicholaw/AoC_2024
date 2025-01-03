@@ -18,14 +18,24 @@ enum Orientation {
 class MapNode {
     private:
         bool obstructed;
+        bool visited;
     
     public:
         MapNode(bool ob) {
             obstructed = ob;
+            visited = false;
         }
 
         bool isObstructed() {
             return obstructed;
+        }
+
+        void visit() {
+            visited = true;
+        }
+
+        bool wasVisited() {
+            return visited;
         }
 };
 
