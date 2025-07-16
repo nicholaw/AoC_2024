@@ -77,6 +77,7 @@ void readInput(std::string input) {
 
 int main() {
     readInput("input.txt");
-    std::cout << calibrationTotal;
+    std::string output = std::to_string(calibrationTotal);
+    std::cout << output;
     return 0;
 }//main
