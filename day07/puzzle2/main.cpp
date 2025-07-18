@@ -10,7 +10,7 @@
  * For example, provided 12 and 34, returns 1234
  */
 uint64_t concatNum(uint64_t a, uint64_t b) {
-    return (std::stoi(std::to_string(a) + std::to_string(b)));
+    return (std::stoull(std::to_string(a) + std::to_string(b)));
 }//concatNum
 
 /**
@@ -66,14 +66,14 @@ uint64_t parseLine (std::string line) {
     for(int i = 0; i < line.size(); i++) {
         switch(line.at(i)) {
             case ':':
-                target = std::stoi(str);
+                target = std::stoull(str);
                 str = "";
                 break;
             case ' ':
                 if(skip) {
                     skip = false;
                 } else {
-                    operands->push_back(std::stoi(str));
+                    operands->push_back(std::stoull(str));
                     str = "";
                 }
                 break;
@@ -82,7 +82,7 @@ uint64_t parseLine (std::string line) {
                 break;
         }
     }
-    operands->push_back(std::stoi(str));
+    operands->push_back(std::stoull(str));
 
     return solveCalibration(target, operands);
 }//parseLine
