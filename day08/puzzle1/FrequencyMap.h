@@ -5,18 +5,20 @@
 #include <set>
 #include <string>
 #include <utility>
+#include <vector>
 
 class FrequencyMap {
     private:
-        std::map<std::string, std::set<std::pair<int, int>>*>* anntenas;
+        std::map<std::string, std::set<std::pair<int, int>>*>* antennas;
     
     public:
         FrequencyMap() {
-            anntenas = new  std::map<std::string, std::set<std::pair<int, int>>*>();
+            antennas = new  std::map<std::string, std::set<std::pair<int, int>>*>();
         };
         ~FrequencyMap() {
-            delete anntenas;
+            delete antennas;
         };
         bool addFreq(std::string freq, std::pair<int, int> pos);
         std::map<std::string, std::set<std::pair<int, int>>*> getMap();
+        std::vector<std::pair<int, int>>* getAntennaPositions(std::string freq);
 };
