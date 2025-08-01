@@ -23,8 +23,7 @@ bool inbounds(std::pair<int, int> pos) {
 void addPositions(std::vector<std::pair<int, int>> positions) {
     for(int curr = 0; curr < positions.size(); curr++) {
         for(int next = (curr + 1); next < positions.size(); next++) {
-            //Find slope
-            std::pair<int, int> slope = std::pair(positions.at(next).first - positions.at(next).first,
+            std::pair<int, int> slope = std::pair(positions.at(next).first - positions.at(curr).first,
                                                     positions.at(next).second - positions.at(curr).second);
             std::pair<int, int> resonantNode = std::pair(positions.at(curr).first + slope.first, positions.at(curr).second + slope.second);
             while(inbounds(resonantNode)) {
@@ -81,6 +80,18 @@ void readInput(std::string filename) {
 }//readInput
 
 /**
+ * Returns true if antinodes set contains the provided pair and false otherwise.
+ */
+bool contains(std::pair<int, int> target) {
+    for(const std::pair<int, int> value : *antinodes) {
+        if(target == value) {
+            return true;
+        }
+    }
+    return false;
+}//contains
+
+/**
  * Prints contents of the node and antinode maps to the provided output file.
  */
 void writeOutput(std::string filename) {
@@ -105,7 +116,17 @@ void writeOutput(std::string filename) {
         out << "{" << pair.first << ", " << pair.second << "} ";
         x++;
     }
-    out << "\n";
+    out << "\n\n";
+    for(int y = 0; y < dimensions->second; y++) {
+        for(int x = 0; x < dimensions->first; x++) {
+            if(contains(std::pair<int, int>(x, y))) {
+                out << "#";
+            } else {
+                out << ".";
+            }
+        }
+        out << "\n";
+    }
     out.close();
 }//writeOutput
 
