@@ -22,6 +22,7 @@ bool inbounds(std::pair<int, int> pos) {
  */
 void addPositions(std::vector<std::pair<int, int>> positions) {
     for(int curr = 0; curr < positions.size(); curr++) {
+        antinodes->insert(positions.at(curr));
         for(int next = (curr + 1); next < positions.size(); next++) {
             std::pair<int, int> slope = std::pair(positions.at(next).first - positions.at(curr).first,
                                                     positions.at(next).second - positions.at(curr).second);
@@ -60,6 +61,7 @@ void readInput(std::string filename) {
         inputFile.open(filename);
     } catch (std::exception e) {
         std::cout << "Could not find file \"" << filename << "\"\n";
+        return;
     }
 
     //read input file
