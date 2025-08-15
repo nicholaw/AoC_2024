@@ -1,3 +1,4 @@
+#include <cstdint>
 #include <exception>
 #include <fstream>
 #include <iostream>
@@ -5,9 +6,19 @@
 #include <vector>
 #include "MemoryBrick.h"
 
-void writeOutput(std::vector<MemoryBrick>* values, std::string filename) {
-    std::fstream output;
+const std::string OUT_FILE = "output.txt";
+const std::string IN_FILE = "input.txt";
+
+void clearOutputFile(std::string filename) {
+    std::ofstream output;
     output.open(filename);
+    output << "";
+    output.close();
+}//clearOutputFile
+
+void writeOutput(std::vector<MemoryBrick>* values, std::string filename) {
+    std::ofstream output;
+    output.open(filename, std::ios::app);
     int id;
     for(int i = 0; i < values->size(); i++) {
         id = values->at(i).getId();
@@ -17,12 +28,17 @@ void writeOutput(std::vector<MemoryBrick>* values, std::string filename) {
             output << "[" << id << "]";
         }
     }
-    output << "\n";
+    output << "\n\n";
     output.close();
-}
+}//writeOutput
 
-int compactMemory(std::vector<MemoryBrick>* memory) {
-    int sum = 0;
+uint64_t checkSum() {
+    uint64_t sum = 0;
+    return sum;
+}//checkSum
+
+uint64_t compactMemory(std::vector<MemoryBrick>* memory) {
+    uint64_t sum = 0;
     int frontPointer = 0;
     int backPointer = (memory->size() - 1);
     bool searchback = true;
@@ -48,7 +64,7 @@ int compactMemory(std::vector<MemoryBrick>* memory) {
     }
     sum += ((memory->at(frontPointer).getId()) * frontPointer);
 
-    writeOutput(memory, "output.txt");
+    writeOutput(memory, OUT_FILE);
     return sum;
 }//compactMemory
 
@@ -80,10 +96,11 @@ std::vector<MemoryBrick>* readInput(std::string filename) {
             }
         }
     }
-    writeOutput(memory, "output.txt");
+    writeOutput(memory, OUT_FILE);
     return memory;
 }//readInput
 
 int main() {
-    std::cout << compactMemory(readInput("input.txt")) << "\n";
+    clearOutputFile(OUT_FILE);
+    std::cout << compactMemory(readInput(IN_FILE)) << "\n";
 }//main
