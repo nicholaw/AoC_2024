@@ -6,7 +6,7 @@
 #include "MemoryBrick.h"
 
 void writeOutput(std::vector<MemoryBrick>* values, std::string filename) {
-    std::ofstream output;
+    std::fstream output;
     output.open(filename);
     int id;
     for(int i = 0; i < values->size(); i++) {
@@ -17,6 +17,7 @@ void writeOutput(std::vector<MemoryBrick>* values, std::string filename) {
             output << "[" << id << "]";
         }
     }
+    output << "\n";
     output.close();
 }
 
@@ -79,6 +80,7 @@ std::vector<MemoryBrick>* readInput(std::string filename) {
             }
         }
     }
+    writeOutput(memory, "output.txt");
     return memory;
 }//readInput
 
