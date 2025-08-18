@@ -32,13 +32,17 @@ void writeOutput(std::vector<MemoryBrick>* values, std::string filename) {
     output.close();
 }//writeOutput
 
-uint64_t checkSum() {
+uint64_t checkSum(std::vector<MemoryBrick>* memory) {
     uint64_t sum = 0;
+    for(int i = 0; i < memory->size(); i++) {
+        if(memory->at(i).getId() >= 0) {
+            sum += (i * memory->at(i).getId());
+        }
+    }
     return sum;
 }//checkSum
 
-uint64_t compactMemory(std::vector<MemoryBrick>* memory) {
-    uint64_t sum = 0;
+void compactMemory(std::vector<MemoryBrick>* memory) {
     int frontPointer = 0;
     int backPointer = (memory->size() - 1);
     bool searchback = true;
@@ -50,7 +54,6 @@ uint64_t compactMemory(std::vector<MemoryBrick>* memory) {
                     searchback = false;
                     memory->at(frontPointer) = memory->at(backPointer);
                     memory->at(backPointer) = MemoryBrick(-1);
-                    sum += ((memory->at(frontPointer).getId()) * frontPointer);
                     frontPointer++;
                     backPointer--;
                 } else {
@@ -58,14 +61,10 @@ uint64_t compactMemory(std::vector<MemoryBrick>* memory) {
                 }
             }
         } else {
-            sum += ((memory->at(frontPointer).getId()) * frontPointer);
             frontPointer++;
         }
     }
-    sum += ((memory->at(frontPointer).getId()) * frontPointer);
-
     writeOutput(memory, OUT_FILE);
-    return sum;
 }//compactMemory
 
 std::vector<MemoryBrick>* readInput(std::string filename) {
@@ -102,5 +101,7 @@ std::vector<MemoryBrick>* readInput(std::string filename) {
 
 int main() {
     clearOutputFile(OUT_FILE);
-    std::cout << compactMemory(readInput(IN_FILE)) << "\n";
+    std::vector<MemoryBrick>* memory = readInput(IN_FILE);
+    compactMemory(memory);
+    std::cout << checkSum(memory) << "\n";
 }//main
