@@ -47,6 +47,24 @@ uint64_t checkSum(std::vector<FileBrick>* memory) {
 }//checkSum
 
 void compactMemory(std::vector<FileBrick>* memory) {
+    for(int i = (memory->size() - 1); i >= 0; i--) {
+        if(memory->at(i).getId >= 0 && !(memory->at(i).wasMoved)) {         //location is an unmoved file
+            for(int j = 0; j < i; j++) {                                    //search left to right for adequate space
+                if(memory->at(j).getId() < 0) {                             //location is empty space
+                    if(memory->at(j).getSize() > memory->at(i).getSize()) { //location has more than enough space to hold file
+                        //Create new FileBrick with empty space and shift array right
+
+                    } else if(memory->at(j).getSize() == memory->at(i).getSize()) { //location has just enough space to hold file
+                        //Simply swap file with empty space
+                        FileBrick temp = memory->at(j);
+                        memory->at(i).move(0, 0);
+                        memory->at(j) = memory->at(i);
+                        memory->at(i) = temp;
+                    }
+                }
+            }
+        }
+    }
     writeOutput(memory, OUT_FILE);
 }//compactMemory
 
@@ -66,14 +84,15 @@ std::vector<FileBrick>* readInput(std::string filename) {
     std::string line = "";
     int count;
     int fileID = 0;
+    int memoryPosition = 0;
     while (std::getline(input, line)) {
         for(int i = 0; i < line.size(); i++) {
             count = line.at(i) - '0';
             if((i % 2) == 0) {    //position is a file
-                memory->push_back(FileBrick(fileID, count));
+                memory->push_back(FileBrick(fileID, memoryPosition, (memoryPosition + count)));
                 fileID++;
             } else {            //position is free space
-                memory->push_back(FileBrick(-1, count));
+                memory->push_back(FileBrick(-1, memoryPosition, (memoryPosition + count)));
             }
         }
     }

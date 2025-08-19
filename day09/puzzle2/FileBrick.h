@@ -1,12 +1,16 @@
+#include <utility>
 #pragma once
 
 class FileBrick {
     private:
         int id;
-        int size;
+        std::pair<int, int> range;
+        bool moved;
     
     public:
-        FileBrick(int _id, int _size) {id = _id; size = _size;};
+        FileBrick(int _id, int start, int end) {id = _id; range = std::pair(start, end); moved = false;};
         int getId() {return id;};
-        int getSize() {return size;};
+        int getSize() {return (range.second - range.first);};
+        void move(std::pair<int, int> newRange) {range = newRange; moved = true;};
+        bool wasMoved() {return moved;};
 };
