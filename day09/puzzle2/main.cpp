@@ -77,11 +77,11 @@ uint64_t checkSum(std::vector<int>* memory) {
 std::pair<std::vector<int>*, std::vector<MemoryBlock>*> compactMemory(std::pair<std::vector<int>*, std::vector<MemoryBlock>*> memory) {
     //Compact memory based on meta memory data
     for(int i = (memory.second->size() - 1); i >= 0; i--) {
-        if(memory.second->at(i).getId() >= 0) {     //Found a file
+        if(memory.second->at(i).getId() >= 0 && !(memory.second->at(i).getMoved())) {     //Found an unmoved file
             for(int j = 0; j < i; j++) {            //Look of free space big enough to acocmodate file
                 if(memory.second->at(j).getId() < 0) {//Found free space
                     if(memory.second->at(j).getSize() >= memory.second->at(i).getSize()) {    //Free space is big enough
-                        for(int k = 0; k < memory.second->at(i).getSize(); k++) {           //Swap file position
+                        for(int k = 0; k < memory.second->at(i).getSize(); k++) {             //Swap file position
                             memory.first->at(memory.second->at(j).getIndex() + k) = memory.second->at(i).getId();
                             memory.first->at(memory.second->at(i).getIndex() + k) = -1;
                         }
