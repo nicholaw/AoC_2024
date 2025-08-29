@@ -6,6 +6,9 @@
 #include <utility>
 #include <vector>
 
+//TODO: I think local score is supposed to be the number of destinations, not the number of routes
+//i.e. do not count any '9' more than once
+
 int globalScore;
 std::vector<std::vector<int>*>* topomap;            //topographical map
 std::set<std::pair<int, int>>* potentialTrailheads; //positions of all zeros
