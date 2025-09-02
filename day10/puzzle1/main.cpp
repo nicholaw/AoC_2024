@@ -99,7 +99,7 @@ int peek(std::pair<int, int> pos) {
     }   
 }//peek
 
-int searchTrailhead(direction dir, std::pair<int, int> pos) {
+void searchTrailhead(direction dir, std::pair<int, int> pos, std::set<std::pair<int, int>>* destinations) {
     int curr = topomap->at(pos.second)->at(pos.first);
     std::pair<int, int> nextpos;
     int next;
@@ -117,22 +117,22 @@ int searchTrailhead(direction dir, std::pair<int, int> pos) {
         nextpos = std::pair<int, int>(pos.first - 1, pos.second);
         break;
     default:
-        return 0;
+        return;
     }
     next = peek(nextpos);
     if(next < 0) {  //Route is out of bounds
-        return 0;
+        return;
     } else if(curr == 8 && next == 9) {  //Route is valid and complete
-        return 1;
+        destinations->insert(nextpos);
+        return;
     } else if(next == (curr + 1)) { //Route is valid and ongoing
-        int localScore = 0;
-        localScore += searchTrailhead(UP, nextpos);
-        localScore += searchTrailhead(DOWN, nextpos);
-        localScore += searchTrailhead(RIGHT, nextpos);
-        localScore += searchTrailhead(LEFT, nextpos);
-        return localScore;
+        searchTrailhead(UP, nextpos, destinations);
+        searchTrailhead(DOWN, nextpos, destinations);
+        searchTrailhead(RIGHT, nextpos, destinations);
+        searchTrailhead(LEFT, nextpos, destinations);
+        return;
     } else {        //Route is invalid
-        return 0;
+        return;
     }
 }//searchTrailhead
 
@@ -140,15 +140,15 @@ int searchTrailhead(direction dir, std::pair<int, int> pos) {
  * Walk through topographical map starting from each potential trailhead and calculate trailhead scores.
  */
 void mapTrailheads() {
-    int localScore;
+    std::set<std::pair<int, int>>* destinations; //Discrete peaks reachable from current trailhead
     for(std::pair<int, int> position : *potentialTrailheads) {
-        localScore = 0;
-        localScore += searchTrailhead(UP, position);
-        localScore += searchTrailhead(DOWN, position);
-        localScore += searchTrailhead(RIGHT, position);
-        localScore += searchTrailhead(LEFT, position);
-        printScore(position, localScore);
-        globalScore += localScore;
+        destinations = new std::set<std::pair<int, int>>();
+        searchTrailhead(UP, position, destinations);
+        searchTrailhead(DOWN, position, destinations);
+        searchTrailhead(RIGHT, position, destinations);
+        searchTrailhead(LEFT, position, destinations);
+        printScore(position, destinations->size());
+        globalScore += destinations->size();
     }
 }//mapTrailheads
 
