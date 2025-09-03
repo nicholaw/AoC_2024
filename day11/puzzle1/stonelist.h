@@ -24,11 +24,11 @@ struct StoneList {
                 size++;
                 return true;
             } else {
-                Stone* next = head->getNext();
-                while(next != nullptr) {
-                    next = next->getNext();
+                Stone* curr = head->getNext();
+                while(curr != nullptr) {
+                    curr = curr->getNext();
                 }
-                next->updateNext(stn);
+                curr->updateNext(stn);
                 size++;
                 return true;
             }
