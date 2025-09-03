@@ -1,3 +1,4 @@
+#include <cstdint>
 #include <string>
 #include <utility>
 
@@ -38,11 +39,7 @@ struct Stone {
                 index++;
             }
             while(index < str.size()) {
-                bool leadDigit = false;
-                if((str.at(index) - '0' > 0) || leadDigit) {
-                    back += str.at(index);
-                    leadDigit = true;
-                }
+                back += str.at(index);
                 index++;
             }
             return std::pair<int, int>(std::stoi(front), std::stoi(back));

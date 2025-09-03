@@ -10,9 +10,10 @@ void clearOutput(std::string filename) {
     output.close();
 }//clearOutputFile
 
-void writeOutput(std::string filename, std::vector<int>* values) {
+void writeOutput(std::string filename, std::vector<int>* values, int blinks) {
     std::ofstream output;
     output.open(filename, std::ios::app);
+    output << blinks << ": ";
     int index = 0;
     for(index; index < values->size() - 1; index++) {
         output << values->at(index) << " ";
@@ -45,10 +46,21 @@ void readInput(std::string filename, StoneList* list) {
     }
 }//readInput
 
+int blink(StoneList* list, int count) {
+    writeOutput("output.txt", list->toArray(), 0);
+    for(int i = 0; i < count; i++) {
+        list->blink();
+        if(i < 6) {
+            writeOutput("output.txt", list->toArray(), i + 1);
+        }
+    }
+    return list->getSize();
+}//blink
+
 int main() {
     StoneList* list = new StoneList();
     clearOutput("output.txt");
     readInput("input.txt", list);
-    writeOutput("output.txt", list->toArray());
+    std::cout << blink(list, 25);
     return 0;
 }

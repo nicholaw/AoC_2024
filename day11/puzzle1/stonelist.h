@@ -24,8 +24,8 @@ struct StoneList {
                 size++;
                 return true;
             } else {
-                Stone* curr = head->getNext();
-                while(curr != nullptr) {
+                Stone* curr = head;
+                while(curr->getNext() != nullptr) {
                     curr = curr->getNext();
                 }
                 curr->updateNext(stn);
