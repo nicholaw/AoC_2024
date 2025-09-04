@@ -49,12 +49,10 @@ void readInput(std::string filename, StoneList* list) {
 int blink(StoneList* list, int count) {
     writeOutput("output.txt", list->toArray(), 0);
     for(int i = 0; i < count; i++) {
-        std::cout << "Blink " << (i + 1) << "...";
         list->blink();
         if(i < 6) {
             writeOutput("output.txt", list->toArray(), i + 1);
         }
-        std::cout << "complete (" << list->getSize() << ")\n";
     }
     return list->getSize();
 }//blink
@@ -63,6 +61,6 @@ int main() {
     StoneList* list = new StoneList();
     clearOutput("output.txt");
     readInput("input.txt", list);
-    std::cout << blink(list, 75);
+    std::cout << blink(list, 25);
     return 0;
 }
