@@ -10,7 +10,7 @@ void clearOutput(std::string filename) {
     output.close();
 }//clearOutputFile
 
-void writeOutput(std::string filename, std::vector<int>* values, int blinks) {
+void writeOutput(std::string filename, std::vector<uint16_t>* values, int blinks) {
     std::ofstream output;
     output.open(filename, std::ios::app);
     output << blinks << ": ";
@@ -36,13 +36,13 @@ void readInput(std::string filename, StoneList* list) {
     while(std::getline(input, line)) {
         for(int i = 0; i < line.size(); i++) {
             if(line.at(i) == ' ') {
-                list->append(new Stone(std::stoi(num)));
+                list->append(new Stone(std::stoull(num)));
                 num = "";
             } else {
                 num += line.at(i);
             }
         }
-        list->append(new Stone(std::stoi(num)));
+        list->append(new Stone(std::stoull(num)));
     }
 }//readInput
 

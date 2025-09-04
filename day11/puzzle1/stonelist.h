@@ -51,8 +51,8 @@ struct StoneList {
             return size;
         };
 
-        std::vector<int>* toArray() {
-            std::vector<int>* values = new std::vector<int>();
+        std::vector<uint16_t>* toArray() {
+            std::vector<uint16_t>* values = new std::vector<uint16_t>();
             Stone* curr = head;
             while(curr != nullptr) {
                 values->push_back(curr->getValue());

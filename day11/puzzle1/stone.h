@@ -7,7 +7,7 @@
 struct Stone {
     private:
         //Attributes
-        int value;
+        uint16_t value;
         Stone* next;
 
         /**
@@ -29,7 +29,7 @@ struct Stone {
          * Returns a pair object whose first element is an int made from the first half of digits of this Stone's value and
          * whose second element is an int made from the second half digits of this Stone's value with leading 0's removed.
          */
-        std::pair<int, int> splitValue() {
+        std::pair<uint16_t, uint16_t> splitValue() {
             std::string str = std::to_string(value);
             std::string front = "";
             std::string back = "";
@@ -42,16 +42,16 @@ struct Stone {
                 back += str.at(index);
                 index++;
             }
-            return std::pair<int, int>(std::stoi(front), std::stoi(back));
+            return std::pair<uint16_t, uint16_t>(std::stoull(front), std::stoull(back));
         };
     
     public:
-        Stone(int _value) {
+        Stone(uint16_t _value) {
             value = _value;
             next = nullptr;
         };
 
-        Stone(int _value, Stone* _next) {
+        Stone(uint16_t _value, Stone* _next) {
             value = _value;
             next = _next;
         };
@@ -69,7 +69,7 @@ struct Stone {
                 value = 1;
                 return false;
             } else if(rule2()) {
-                std::pair<int, int> newValues = splitValue();
+                std::pair<uint16_t, uint16_t> newValues = splitValue();
                 next = new Stone(newValues.second, next);
                 value = newValues.first;
                 return true;
@@ -89,7 +89,7 @@ struct Stone {
         /**
          * Returns the value engraved on this stone.
          */
-        int getValue() {
+        uint16_t getValue() {
             return value;
         }
 
