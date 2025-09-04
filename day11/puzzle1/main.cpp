@@ -10,7 +10,7 @@ void clearOutput(std::string filename) {
     output.close();
 }//clearOutputFile
 
-void writeOutput(std::string filename, std::vector<uint16_t>* values, int blinks) {
+void writeOutput(std::string filename, std::vector<uint64_t>* values, int blinks) {
     std::ofstream output;
     output.open(filename, std::ios::app);
     output << blinks << ": ";
