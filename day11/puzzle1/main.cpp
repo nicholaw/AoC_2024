@@ -5,7 +5,7 @@
 #include <map>
 #include <string>
 
-std::map<uint64_t, uint8_t>* stoneline;
+std::map<uint64_t, uint64_t>* stoneline;
 
 void clearOutput(std::string filename) {
     std::ofstream output;
@@ -84,7 +84,7 @@ uint64_t countMap() {
     return sum;
 }//countMap
 
-bool addToMap(uint64_t key, uint8_t value, std::map<uint64_t, uint8_t>* map) {
+bool addToMap(uint64_t key, uint64_t value, std::map<uint64_t, uint64_t>* map) {
     try {
         map->at(key) += value;
         return true;
@@ -98,7 +98,7 @@ void blink(int count) {
     writeOutput("output.txt", 0);
     for(int i = 0; i < count; i++) {
         std::cout << "Blink " << (i + 1) << "...";
-        std::map<uint64_t, uint8_t>* temp = new std::map<uint64_t, uint8_t>();
+        std::map<uint64_t, uint64_t>* temp = new std::map<uint64_t, uint64_t>();
         for (const auto& pair : *stoneline) {
             if(rule1(pair.first)) {
                 addToMap(1, pair.second, temp);
@@ -120,7 +120,7 @@ void blink(int count) {
 }//blink
 
 int main() {
-    stoneline = new std::map<uint64_t, uint8_t>();
+    stoneline = new std::map<uint64_t, uint64_t>();
     clearOutput("output.txt");
     readInput("input.txt");
     blink(75);
