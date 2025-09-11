@@ -3,10 +3,32 @@
 #include <iostream>
 #include <set>
 #include <string>
-#include <utility>
 #include <vector>
+#include "Region.h"
 
 using namespace std;
+
+void printRegions(set<Region>* regions) {
+    int count = 0;
+    for(Region r : *regions) {
+        if(count < 10) {
+            cout << "0";
+        }
+        cout << count << ": " << r.getCrop() << ", " << r.getMeasurements().first << ", " << r.getMeasurements().second << "\n";
+        count++;
+    }
+}//printRegions
+
+set<Region>* mapRegions(vector<vector<char>>* plots) {
+    set<Region>* regions = new set<Region>();
+    for(int i = 0; i < plots->size(); i++) {
+        for(int j = 0; j < plots->at(i).size(); j++) {
+            regions->insert(Region(plots->at(i).at(j)));
+        }
+    }
+    printRegions(regions);
+    return regions;
+}//mapRegions
 
 /**
  * Writes contents of the provided 2D arary to a text file with the provided name.
@@ -51,5 +73,6 @@ vector<vector<char>>* readInput(string filename) {
 
 int main() {
     vector<vector<char>>* plots = readInput("input.txt");
+    set<Region>* regions = mapRegions(plots);
     return 0;
 }//main
