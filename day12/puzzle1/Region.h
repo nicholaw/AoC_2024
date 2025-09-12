@@ -17,6 +17,6 @@ struct Region {
         int addPlot(int localPerimeter) {perimeter += localPerimeter; area++; return area;};
         bool cropsMatch(char target) {return (crop == target);};
         pair<int, int> getMeasurements() {return pair<int, int>(area, perimeter);};
-        void printInfo() {cout << crop << ", Area = " << area << " Perimeter = " << perimeter << "\n";};
-        bool operator<(const Region& other) const {return id == other.id;};
+        void printInfo() {cout << "(" << id << ") " << crop << ", Area = " << area << " Perimeter = " << perimeter << "\n";};
+        bool operator<(const Region& other) const {return id < other.id;};
 };

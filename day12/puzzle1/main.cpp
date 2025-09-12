@@ -9,6 +9,21 @@
 using namespace std;
 
 /**
+ * Returns the sum of the products of the areas and perimeters of each region
+ * in the provided set of regions.
+ */
+int calculateCost(const set<Region>& regions) {
+    int totalCost = 0;
+    pair<int, int> p;
+    for(Region r : regions) {
+        r.printInfo();
+        p = r.getMeasurements();
+        totalCost += (p.first * p.second);
+    }
+    return totalCost;
+}//calculateCost
+
+/**
  * Prints each of the regions contained in the provided set.
  */
 void printRegions(const set<Region>& regions) {
@@ -18,30 +33,84 @@ void printRegions(const set<Region>& regions) {
 }//printRegions
 
 /**
+ * Search plots adjacent to the plot at the provided position in the provided table for plots that
+ * match the crop in the provided region and add that plot to the provided region if the crops do match.
+ */
+void searchNeighbors(vector<vector<char>>& table, const pair<int, int>& pos, Region& region) {
+    table.at(pos.first).at(pos.second) = '.';
+    int localPerimeter = 0;
+    int row, column = 0;
+    try { //search up
+        row = pos.first - 1; column = pos.second;
+        if(region.cropsMatch(table.at(row).at(column))) {
+            searchNeighbors(table, pair<int, int>(row, column), region);
+        } else {
+            localPerimeter++;
+        }
+    } catch(exception a) { //out of bounds
+        localPerimeter++;
+    }
+    try { //search down
+        row = pos.first + 1; column = pos.second;
+        if(region.cropsMatch(table.at(row).at(column))) {
+            searchNeighbors(table, pair<int, int>(row, column), region);
+        } else {
+            localPerimeter++;
+        }
+    } catch(exception a) { //out of bounds
+        localPerimeter++;
+    }
+    try { //search right
+        row = pos.first; column = pos.second + 1;
+        if(region.cropsMatch(table.at(row).at(column))) {
+            searchNeighbors(table, pair<int, int>(row, column), region);
+        } else {
+            localPerimeter++;
+        }
+    } catch(exception a) { //out of bounds
+        localPerimeter++;
+    }
+    try { //search left
+        row = pos.first; column = pos.second - 1;
+        if(region.cropsMatch(table.at(row).at(column))) {
+            searchNeighbors(table, pair<int, int>(row, column), region);
+        } else {
+            localPerimeter++;
+        }
+    } catch(exception a) { //out of bounds
+        localPerimeter++;
+    }
+    region.addPlot(localPerimeter);
+}//searchNeighbors
+
+/**
  * Maps discrete regions of common crops in the provided 2D array of plots.
  */
 set<Region>* mapRegions(vector<vector<char>>* plots) {
     set<Region>* regions = new set<Region>();
     int curr = 0;
-    for(int i = 0; i < plots->size(); i++) {
-        for(int j = 0; j < plots->at(i).size(); j++) {
-            regions->insert(Region(plots->at(i).at(j), curr));
-            curr++;
-        }
-    }
-    printRegions(*regions);
+    for(int row = 0; row < plots->size(); row++) {
+        for(int column = 0; column < plots->at(row).size(); column++) {
+            if(plots->at(row).at(column) != '.') {
+                Region r = Region(plots->at(row).at(column), curr);
+                regions->insert(r);
+                searchNeighbors(*plots, pair<int, int>(row, column), r);
+                curr++;
+            }
+        }//loop through columns
+    }//loop through rows
     return regions;
 }//mapRegions
 
 /**
  * Writes contents of the provided 2D arary to a text file with the provided name.
  */
-void writeOutput(string destination, vector<vector<char>>* table) {
+void writeOutput(string destination, const vector<vector<char>>& table) {
     ofstream output;
     output.open(destination);
-    for(int i = 0; i < table->size(); i++) {
-        for(int j = 0; j < table->at(i).size(); j++) {
-            output << table->at(i).at(j);
+    for(int i = 0; i < table.size(); i++) {
+        for(int j = 0; j < table.at(i).size(); j++) {
+            output << table.at(i).at(j);
         }
         output << "\n";
     }
@@ -70,12 +139,14 @@ vector<vector<char>>* readInput(string filename) {
         }
         y++;
     }
-    writeOutput("output.txt", plots);
+    writeOutput("output.txt", *plots);
     return plots;
 }//readInput
 
 int main() {
     vector<vector<char>>* plots = readInput("input.txt");
     set<Region>* regions = mapRegions(plots);
+    int totalCost = calculateCost(*regions);
+    cout << "Total: " << totalCost << "\n";
     return 0;
 }//main
