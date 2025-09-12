@@ -39,7 +39,8 @@ void printRegions(const set<Region>& regions) {
 void searchNeighbors(vector<vector<char>>& table, const pair<int, int>& pos, Region& region) {
     table.at(pos.first).at(pos.second) = '.';
     int localPerimeter = 0;
-    int row, column = 0;
+    int row = 0; 
+    int column = 0;
     try { //search up
         row = pos.first - 1; column = pos.second;
         if(region.cropsMatch(table.at(row).at(column))) {
@@ -95,11 +96,11 @@ set<Region>* mapRegions(vector<vector<char>>* plots) {
                 Region r = Region(plots->at(row).at(column), curr);
                 regions->insert(r);
                 searchNeighbors(*plots, pair<int, int>(row, column), r);
-                curr++;
+                curr++;                                                     //At this point, r has expected area and perimeter.
             }
         }//loop through columns
     }//loop through rows
-    return regions;
+    return regions;                                                         //At this point, each region is back to area = perimeter = 0.
 }//mapRegions
 
 /**
