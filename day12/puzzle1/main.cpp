@@ -8,25 +8,28 @@
 
 using namespace std;
 
-void printRegions(set<Region>* regions) {
-    int count = 0;
-    for(Region r : *regions) {
-        if(count < 10) {
-            cout << "0";
-        }
-        cout << count << ": " << r.getCrop() << ", " << r.getMeasurements().first << ", " << r.getMeasurements().second << "\n";
-        count++;
+/**
+ * Prints each of the regions contained in the provided set.
+ */
+void printRegions(const set<Region>& regions) {
+    for(Region r : regions) {
+        r.printInfo();
     }
 }//printRegions
 
+/**
+ * Maps discrete regions of common crops in the provided 2D array of plots.
+ */
 set<Region>* mapRegions(vector<vector<char>>* plots) {
     set<Region>* regions = new set<Region>();
+    int curr = 0;
     for(int i = 0; i < plots->size(); i++) {
         for(int j = 0; j < plots->at(i).size(); j++) {
-            regions->insert(Region(plots->at(i).at(j)));
+            regions->insert(Region(plots->at(i).at(j), curr));
+            curr++;
         }
     }
-    printRegions(regions);
+    printRegions(*regions);
     return regions;
 }//mapRegions
 
