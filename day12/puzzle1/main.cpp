@@ -87,8 +87,9 @@ void searchNeighbors(vector<vector<char>>& table, const pair<int, int>& pos, Reg
 /**
  * Maps discrete regions of common crops in the provided 2D array of plots.
  */
-set<Region>* mapRegions(vector<vector<char>>* plots) {
+int mapRegions(vector<vector<char>>* plots) {
     set<Region>* regions = new set<Region>();
+    int totalCost = 0;
     int curr = 0;
     for(int row = 0; row < plots->size(); row++) {
         for(int column = 0; column < plots->at(row).size(); column++) {
@@ -97,10 +98,12 @@ set<Region>* mapRegions(vector<vector<char>>* plots) {
                 regions->insert(r);
                 searchNeighbors(*plots, pair<int, int>(row, column), r);
                 curr++;                                                     //At this point, r has expected area and perimeter.
+                pair<int, int> p = r.getMeasurements();
+                totalCost += (p.first * p.second);
             }
         }//loop through columns
     }//loop through rows
-    return regions;                                                         //At this point, each region is back to area = perimeter = 0.
+    return totalCost;                                                         //At this point, each region is back to area = perimeter = 0.
 }//mapRegions
 
 /**
@@ -146,8 +149,7 @@ vector<vector<char>>* readInput(string filename) {
 
 int main() {
     vector<vector<char>>* plots = readInput("input.txt");
-    set<Region>* regions = mapRegions(plots);
-    int totalCost = calculateCost(*regions);
+    int totalCost = mapRegions(plots);
     cout << "Total: " << totalCost << "\n";
     return 0;
 }//main
